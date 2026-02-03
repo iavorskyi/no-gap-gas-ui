@@ -186,7 +186,7 @@ export const screenshotsApi = {
   },
 
   getUrl: (jobId: string, filename: string): string => {
-    return `${API_BASE}/screenshots/${jobId}/${filename}`;
+    return `/screenshots/${jobId}/${filename}`;
   },
 };
 
