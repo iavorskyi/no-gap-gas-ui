@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Fuel } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, Input, Alert } from '../components/ui';
 import { getErrorMessage } from '../lib/api';
@@ -51,11 +51,11 @@ export const Login: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center space-x-2">
-            <Fuel className="w-10 h-10 text-blue-600" />
+            <Flame className="w-10 h-10 text-teal-600" />
             <span className="text-2xl font-bold text-gray-900">NoGapGas</span>
           </Link>
           <h1 className="mt-6 text-3xl font-bold text-gray-900">Welcome back</h1>
-          <p className="mt-2 text-gray-600">Sign in to your account to continue</p>
+          <p className="mt-2 text-gray-600">Sign in to manage your gas consumption</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">

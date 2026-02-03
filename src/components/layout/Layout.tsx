@@ -6,7 +6,7 @@ import {
   PlayCircle,
   User,
   LogOut,
-  Fuel,
+  Flame,
   Menu,
   X
 } from 'lucide-react';
@@ -56,7 +56,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
             <Link to="/" className="flex items-center space-x-2">
-              <Fuel className="w-8 h-8 text-blue-600" />
+              <Flame className="w-8 h-8 text-teal-600" />
               <span className="text-xl font-bold text-gray-900">NoGapGas</span>
             </Link>
             <button
@@ -79,12 +79,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className={`
                     flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors
                     ${isActive
-                      ? 'bg-blue-50 text-blue-700'
+                      ? 'bg-teal-50 text-teal-700'
                       : 'text-gray-700 hover:bg-gray-100'
                     }
                   `}
                 >
-                  <item.icon className={`w-5 h-5 mr-3 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+                  <item.icon className={`w-5 h-5 mr-3 ${isActive ? 'text-teal-600' : 'text-gray-400'}`} />
                   {item.name}
                 </Link>
               );
@@ -94,8 +94,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {/* User section */}
           <div className="p-4 border-t border-gray-200">
             <div className="flex items-center space-x-3 mb-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-teal-600" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
@@ -126,7 +126,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Menu className="w-6 h-6" />
             </button>
             <Link to="/" className="flex items-center space-x-2">
-              <Fuel className="w-7 h-7 text-blue-600" />
+              <Flame className="w-7 h-7 text-teal-600" />
               <span className="text-lg font-bold text-gray-900">NoGapGas</span>
             </Link>
             <div className="w-6" />

@@ -44,7 +44,7 @@ export const Dashboard: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Welcome to your gas tracking dashboard</p>
+            <p className="text-gray-600 mt-1">Monitor your natural gas consumption</p>
           </div>
           <Link to="/jobs">
             <Button>
@@ -94,7 +94,7 @@ export const Dashboard: React.FC = () => {
                 <PlayCircle className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Total Jobs</p>
+                <p className="text-sm text-gray-500">Meter Submissions</p>
                 <p className="text-lg font-semibold text-gray-900">
                   {isLoading ? 'Loading...' : status?.recent_jobs?.length || 0}
                 </p>
@@ -123,7 +123,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Recent Jobs</CardTitle>
-                <CardDescription>Your latest automation runs</CardDescription>
+                <CardDescription>Your latest meter reading submissions</CardDescription>
               </div>
               <Link to="/jobs">
                 <Button variant="outline" size="sm">
