@@ -11,10 +11,14 @@ import {
   AlertTriangle,
   ArrowRight,
   Loader2,
+  User,
+  Gauge,
+  Banknote,
+  RefreshCw,
 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription, Badge, Button, Alert } from '../components/ui';
-import { statusApi, configApi } from '../lib/api';
+import { statusApi, configApi, gasolinaInfoApi } from '../lib/api';
 import type { JobStatus } from '../types/api';
 
 const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info' }> = {
@@ -34,6 +38,14 @@ export const Dashboard: React.FC = () => {
   const { data: config, isLoading: configLoading } = useQuery({
     queryKey: ['config'],
     queryFn: configApi.get,
+  });
+
+  const { data: gasolinaInfo, isLoading: gasolinaInfoLoading, refetch: refetchGasolinaInfo, isFetching: gasolinaInfoFetching } = useQuery({
+    queryKey: ['gasolinaInfo'],
+    queryFn: gasolinaInfoApi.get,
+    enabled: !!status?.configured,
+    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+    retry: 1,
   });
 
   const isLoading = statusLoading || configLoading;
@@ -66,6 +78,114 @@ export const Dashboard: React.FC = () => {
               <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </Alert>
+        )}
+
+        {/* Gasolina Account Info */}
+        {status?.configured && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-full bg-blue-100">
+                    <User className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <CardTitle>Gasolina Account</CardTitle>
+                    <CardDescription>
+                      {gasolinaInfo?.fetched_at ? `Updated: ${gasolinaInfo.fetched_at}` : 'Live data from gasolina-online.com'}
+                    </CardDescription>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => refetchGasolinaInfo()}
+                  disabled={gasolinaInfoFetching}
+                >
+                  <RefreshCw className={`w-4 h-4 mr-2 ${gasolinaInfoFetching ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {gasolinaInfoLoading || gasolinaInfoFetching ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                  <span className="ml-2 text-gray-500">Fetching data from Gasolina...</span>
+                </div>
+              ) : gasolinaInfo ? (
+                <div className="space-y-6">
+                  {/* User Info */}
+                  <div className="flex items-start space-x-4 pb-4 border-b border-gray-100">
+                    <div className="p-3 rounded-full bg-gray-100">
+                      <User className="w-6 h-6 text-gray-600" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900">{gasolinaInfo.user_name}</p>
+                      <p className="text-sm text-gray-500">{gasolinaInfo.user_address}</p>
+                    </div>
+                  </div>
+
+                  {/* Counter Info */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                      <Gauge className="w-8 h-8 text-blue-500" />
+                      <div>
+                        <p className="text-xs text-gray-500">Counter №</p>
+                        <p className="text-lg font-bold text-gray-900">{gasolinaInfo.counter_number}</p>
+                        <p className="text-xs text-gray-400">{gasolinaInfo.counter_type}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg">
+                      <div className="text-3xl">📊</div>
+                      <div>
+                        <p className="text-xs text-gray-500">Previous Reading</p>
+                        <p className="text-2xl font-bold text-blue-600">{gasolinaInfo.previous_reading}</p>
+                        <p className="text-xs text-gray-400">m³</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
+                      <Banknote className="w-8 h-8 text-green-500" />
+                      <div>
+                        <p className="text-xs text-gray-500">Gas Price</p>
+                        <p className="text-lg font-bold text-green-600">{gasolinaInfo.gas_distribution_price} грн</p>
+                        <p className="text-xs text-gray-400">per m³</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Debts */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 border border-orange-200 bg-orange-50 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-orange-800">Gas Distribution Debt</p>
+                          <p className="text-xs text-orange-600">as of {gasolinaInfo.gas_distribution_date}</p>
+                        </div>
+                        <p className="text-xl font-bold text-orange-700">{gasolinaInfo.gas_distribution_debt}</p>
+                      </div>
+                    </div>
+                    <div className="p-4 border border-purple-200 bg-purple-50 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-purple-800">Technical Service Debt</p>
+                          <p className="text-xs text-purple-600">as of {gasolinaInfo.tech_service_date}</p>
+                        </div>
+                        <p className="text-xl font-bold text-purple-700">{gasolinaInfo.tech_service_debt}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <p>Unable to fetch Gasolina data</p>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={() => refetchGasolinaInfo()}>
+                    Try Again
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         )}
 
         {/* Status Cards */}

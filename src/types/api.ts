@@ -111,3 +111,18 @@ export interface ServiceStatus {
 export interface ApiError {
   error: string;
 }
+
+// Gasolina user info (scraped from gasolina-online.com)
+export interface GasolinaUserInfo {
+  user_name: string;
+  user_address: string;
+  gas_distribution_price: string;
+  gas_distribution_debt: string;
+  gas_distribution_date: string;
+  counter_number: string;
+  counter_type: string;
+  previous_reading: string;
+  tech_service_debt: string;
+  tech_service_date: string;
+  fetched_at: string;
+}

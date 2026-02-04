@@ -15,6 +15,7 @@ import type {
   Screenshot,
   ServiceStatus,
   ApiError,
+  GasolinaUserInfo,
 } from '../types/api';
 
 const API_BASE = '/api';
@@ -194,6 +195,14 @@ export const screenshotsApi = {
 export const statusApi = {
   get: async (): Promise<ServiceStatus> => {
     const response = await api.get<ServiceStatus>('/status');
+    return response.data;
+  },
+};
+
+// Gasolina Info API (scrapes data from gasolina-online.com)
+export const gasolinaInfoApi = {
+  get: async (): Promise<GasolinaUserInfo> => {
+    const response = await api.get<GasolinaUserInfo>('/gasolina-info');
     return response.data;
   },
 };
