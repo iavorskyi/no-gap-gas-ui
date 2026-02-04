@@ -19,19 +19,19 @@ import { configApi, getErrorMessage } from '../lib/api';
 import type { MonthlyIncrements } from '../types/api';
 
 const configSchema = z.object({
-  gasolina_email: z.string().email('Invalid email address').or(z.literal('')),
+  gasolina_email: z.string().email('Невірна адреса електронної пошти').or(z.literal('')),
   gasolina_password: z.string().optional(),
   account_number: z.string().optional(),
-  check_url: z.string().url('Invalid URL').or(z.literal('')),
-  cron_schedule: z.string().min(1, 'Cron schedule is required'),
+  check_url: z.string().url('Невірна URL-адреса').or(z.literal('')),
+  cron_schedule: z.string().min(1, 'Розклад cron є обов\'язковим'),
   dry_run: z.boolean(),
 });
 
 type ConfigForm = z.infer<typeof configSchema>;
 
 const monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
+  'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
 ];
 
 export const Configuration: React.FC = () => {
@@ -138,8 +138,8 @@ export const Configuration: React.FC = () => {
     <Layout>
       <div className="p-6 lg:p-8 space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Configuration</h1>
-          <p className="text-gray-600 mt-1">Manage your gas provider settings</p>
+          <h1 className="text-2xl font-bold text-gray-900">Налаштування</h1>
+          <p className="text-gray-600 mt-1">Керуйте налаштуваннями постачальника газу</p>
         </div>
 
         {error && (
@@ -150,7 +150,7 @@ export const Configuration: React.FC = () => {
 
         {success && (
           <Alert variant="success">
-            Configuration saved successfully!
+            Налаштування успішно збережено!
           </Alert>
         )}
 
@@ -158,31 +158,31 @@ export const Configuration: React.FC = () => {
           {/* Gasolina Credentials */}
           <Card>
             <CardHeader>
-              <CardTitle>Gasolina Credentials</CardTitle>
+              <CardTitle>Облікові дані Gasolina</CardTitle>
               <CardDescription>
-                Your login credentials for the Gasolina website
+                Ваші облікові дані для входу на сайт Gasolina
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
-                  label="Gasolina Email"
+                  label="Email Gasolina"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder="ваш@email.com"
                   error={errors.gasolina_email?.message}
                   {...register('gasolina_email')}
                 />
                 <Input
-                  label="Gasolina Password"
+                  label="Пароль Gasolina"
                   type="password"
                   placeholder="••••••••"
-                  helperText="Leave empty to keep existing password"
+                  helperText="Залиште порожнім, щоб зберегти існуючий пароль"
                   error={errors.gasolina_password?.message}
                   {...register('gasolina_password')}
                 />
               </div>
               <Input
-                label="Account Number"
+                label="Номер рахунку"
                 placeholder="12345678"
                 error={errors.account_number?.message}
                 {...register('account_number')}
@@ -193,14 +193,14 @@ export const Configuration: React.FC = () => {
           {/* Automation Settings */}
           <Card>
             <CardHeader>
-              <CardTitle>Automation Settings</CardTitle>
+              <CardTitle>Налаштування автоматизації</CardTitle>
               <CardDescription>
-                Configure how the automation runs
+                Налаштуйте параметри автоматизації
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Input
-                label="Check URL"
+                label="URL перевірки"
                 type="url"
                 placeholder="https://gasolina-online.com/indicator"
                 error={errors.check_url?.message}
@@ -208,9 +208,9 @@ export const Configuration: React.FC = () => {
               />
 
               <Input
-                label="Cron Schedule"
+                label="Розклад Cron"
                 placeholder="0 0 1 * *"
-                helperText="Format: minute hour day month day-of-week (e.g., '0 0 1 * *' = 1st day of month at midnight)"
+                helperText="Формат: хвилина година день місяць день-тижня (напр., '0 0 1 * *' = 1-е число місяця опівночі)"
                 error={errors.cron_schedule?.message}
                 {...register('cron_schedule')}
               />
@@ -223,14 +223,14 @@ export const Configuration: React.FC = () => {
                   {...register('dry_run')}
                 />
                 <label htmlFor="dry_run" className="text-sm font-medium text-gray-700">
-                  Dry Run Mode
+                  Тестовий режим
                 </label>
               </div>
               <p className="text-sm text-gray-500 flex items-start space-x-2">
                 <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>
-                  When enabled, the automation will perform all steps but won't actually submit any forms.
-                  Recommended for testing your configuration.
+                  Коли увімкнено, автоматизація виконає всі кроки, але не буде фактично надсилати форми.
+                  Рекомендується для тестування вашої конфігурації.
                 </span>
               </p>
             </CardContent>
@@ -239,9 +239,9 @@ export const Configuration: React.FC = () => {
           {/* Monthly Increments */}
           <Card>
             <CardHeader>
-              <CardTitle>Monthly Increments</CardTitle>
+              <CardTitle>Місячні приріости</CardTitle>
               <CardDescription>
-                Set the increment value for each month (how much to add to the current reading)
+                Встановіть значення приросту для кожного місяця (скільки додавати до поточного показника)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -278,11 +278,11 @@ export const Configuration: React.FC = () => {
               }}
               disabled={!isDirty && Object.keys(monthlyIncrements).length === Object.keys(config?.monthly_increments || {}).length}
             >
-              Reset
+              Скинути
             </Button>
             <Button type="submit" isLoading={updateMutation.isPending}>
               <Save className="w-4 h-4 mr-2" />
-              Save Configuration
+              Зберегти налаштування
             </Button>
           </div>
         </form>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import {
   CheckCircle,
   XCircle,
@@ -21,11 +22,17 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription, Badge, Butto
 import { statusApi, configApi, gasolinaInfoApi } from '../lib/api';
 import type { JobStatus } from '../types/api';
 
-const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info' }> = {
-  pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning' },
-  running: { icon: Loader2, color: 'text-blue-500', variant: 'info' },
-  completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success' },
-  failed: { icon: XCircle, color: 'text-red-500', variant: 'error' },
+const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info'; label: string }> = {
+  pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning', label: 'Очікує' },
+  running: { icon: Loader2, color: 'text-blue-500', variant: 'info', label: 'Виконується' },
+  completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success', label: 'Завершено' },
+  failed: { icon: XCircle, color: 'text-red-500', variant: 'error', label: 'Помилка' },
+};
+
+const jobTypeLabels: Record<string, string> = {
+  'full': 'Повне завдання',
+  'test-login': 'Тест входу',
+  'test-check': 'Тест перевірки',
 };
 
 export const Dashboard: React.FC = () => {
@@ -44,7 +51,7 @@ export const Dashboard: React.FC = () => {
     queryKey: ['gasolinaInfo'],
     queryFn: gasolinaInfoApi.get,
     enabled: !!status?.configured,
-    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+    staleTime: 5 * 60 * 1000,
     retry: 1,
   });
 
@@ -55,26 +62,26 @@ export const Dashboard: React.FC = () => {
       <div className="p-6 lg:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Monitor your natural gas consumption</p>
+            <h1 className="text-2xl font-bold text-gray-900">Головна</h1>
+            <p className="text-gray-600 mt-1">Моніторинг споживання газу</p>
           </div>
           <Link to="/jobs">
             <Button>
               <PlayCircle className="w-4 h-4 mr-2" />
-              Run Job
+              Запустити
             </Button>
           </Link>
         </div>
 
         {/* Configuration Alert */}
         {!configLoading && !status?.configured && (
-          <Alert variant="warning" title="Configuration Required">
-            <p>You need to configure your Gasolina credentials before running jobs.</p>
+          <Alert variant="warning" title="Потрібна конфігурація">
+            <p>Вам потрібно налаштувати облікові дані Gasolina перед запуском завдань.</p>
             <Link
               to="/config"
               className="inline-flex items-center mt-2 text-sm font-medium text-yellow-800 hover:text-yellow-900"
             >
-              Go to Configuration
+              Перейти до налаштувань
               <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </Alert>
@@ -90,9 +97,9 @@ export const Dashboard: React.FC = () => {
                     <User className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <CardTitle>Gasolina Account</CardTitle>
+                    <CardTitle>Обліковий запис Gasolina</CardTitle>
                     <CardDescription>
-                      {gasolinaInfo?.fetched_at ? `Updated: ${gasolinaInfo.fetched_at}` : 'Live data from gasolina-online.com'}
+                      {gasolinaInfo?.fetched_at ? `Оновлено: ${gasolinaInfo.fetched_at}` : 'Дані з gasolina-online.com'}
                     </CardDescription>
                   </div>
                 </div>
@@ -103,7 +110,7 @@ export const Dashboard: React.FC = () => {
                   disabled={gasolinaInfoFetching}
                 >
                   <RefreshCw className={`w-4 h-4 mr-2 ${gasolinaInfoFetching ? 'animate-spin' : ''}`} />
-                  Refresh
+                  Оновити
                 </Button>
               </div>
             </CardHeader>
@@ -111,7 +118,7 @@ export const Dashboard: React.FC = () => {
               {gasolinaInfoLoading || gasolinaInfoFetching ? (
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-                  <span className="ml-2 text-gray-500">Fetching data from Gasolina...</span>
+                  <span className="ml-2 text-gray-500">Завантаження даних з Gasolina...</span>
                 </div>
               ) : gasolinaInfo ? (
                 <div className="space-y-6">
@@ -131,7 +138,7 @@ export const Dashboard: React.FC = () => {
                     <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
                       <Gauge className="w-8 h-8 text-blue-500" />
                       <div>
-                        <p className="text-xs text-gray-500">Counter №</p>
+                        <p className="text-xs text-gray-500">№ лічильника</p>
                         <p className="text-lg font-bold text-gray-900">{gasolinaInfo.counter_number}</p>
                         <p className="text-xs text-gray-400">{gasolinaInfo.counter_type}</p>
                       </div>
@@ -139,17 +146,17 @@ export const Dashboard: React.FC = () => {
                     <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg">
                       <div className="text-3xl">📊</div>
                       <div>
-                        <p className="text-xs text-gray-500">Previous Reading</p>
+                        <p className="text-xs text-gray-500">Попередній показник</p>
                         <p className="text-2xl font-bold text-blue-600">{gasolinaInfo.previous_reading}</p>
-                        <p className="text-xs text-gray-400">m³</p>
+                        <p className="text-xs text-gray-400">м³</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
                       <Banknote className="w-8 h-8 text-green-500" />
                       <div>
-                        <p className="text-xs text-gray-500">Gas Price</p>
+                        <p className="text-xs text-gray-500">Ціна за газ</p>
                         <p className="text-lg font-bold text-green-600">{gasolinaInfo.gas_distribution_price} грн</p>
-                        <p className="text-xs text-gray-400">per m³</p>
+                        <p className="text-xs text-gray-400">за м³</p>
                       </div>
                     </div>
                   </div>
@@ -159,8 +166,8 @@ export const Dashboard: React.FC = () => {
                     <div className="p-4 border border-orange-200 bg-orange-50 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-orange-800">Gas Distribution Debt</p>
-                          <p className="text-xs text-orange-600">as of {gasolinaInfo.gas_distribution_date}</p>
+                          <p className="text-sm font-medium text-orange-800">Борг за розподіл газу</p>
+                          <p className="text-xs text-orange-600">станом на {gasolinaInfo.gas_distribution_date}</p>
                         </div>
                         <p className="text-xl font-bold text-orange-700">{gasolinaInfo.gas_distribution_debt}</p>
                       </div>
@@ -168,8 +175,8 @@ export const Dashboard: React.FC = () => {
                     <div className="p-4 border border-purple-200 bg-purple-50 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-purple-800">Technical Service Debt</p>
-                          <p className="text-xs text-purple-600">as of {gasolinaInfo.tech_service_date}</p>
+                          <p className="text-sm font-medium text-purple-800">Борг за тех. обслуговування</p>
+                          <p className="text-xs text-purple-600">станом на {gasolinaInfo.tech_service_date}</p>
                         </div>
                         <p className="text-xl font-bold text-purple-700">{gasolinaInfo.tech_service_debt}</p>
                       </div>
@@ -178,9 +185,9 @@ export const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-8 text-gray-500">
-                  <p>Unable to fetch Gasolina data</p>
+                  <p>Не вдалося завантажити дані Gasolina</p>
                   <Button variant="outline" size="sm" className="mt-2" onClick={() => refetchGasolinaInfo()}>
-                    Try Again
+                    Спробувати знову
                   </Button>
                 </div>
               )}
@@ -200,9 +207,9 @@ export const Dashboard: React.FC = () => {
                 )}
               </div>
               <div>
-                <p className="text-sm text-gray-500">Configuration Status</p>
+                <p className="text-sm text-gray-500">Статус конфігурації</p>
                 <p className="text-lg font-semibold text-gray-900">
-                  {isLoading ? 'Loading...' : status?.configured ? 'Configured' : 'Not Configured'}
+                  {isLoading ? 'Завантаження...' : status?.configured ? 'Налаштовано' : 'Не налаштовано'}
                 </p>
               </div>
             </CardContent>
@@ -214,9 +221,9 @@ export const Dashboard: React.FC = () => {
                 <PlayCircle className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Meter Submissions</p>
+                <p className="text-sm text-gray-500">Подання показників</p>
                 <p className="text-lg font-semibold text-gray-900">
-                  {isLoading ? 'Loading...' : status?.recent_jobs?.length || 0}
+                  {isLoading ? 'Завантаження...' : status?.recent_jobs?.length || 0}
                 </p>
               </div>
             </CardContent>
@@ -228,9 +235,9 @@ export const Dashboard: React.FC = () => {
                 <Settings className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Dry Run Mode</p>
+                <p className="text-sm text-gray-500">Тестовий режим</p>
                 <p className="text-lg font-semibold text-gray-900">
-                  {isLoading ? 'Loading...' : config?.dry_run ? 'Enabled' : 'Disabled'}
+                  {isLoading ? 'Завантаження...' : config?.dry_run ? 'Увімкнено' : 'Вимкнено'}
                 </p>
               </div>
             </CardContent>
@@ -242,12 +249,12 @@ export const Dashboard: React.FC = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Recent Jobs</CardTitle>
-                <CardDescription>Your latest meter reading submissions</CardDescription>
+                <CardTitle>Останні завдання</CardTitle>
+                <CardDescription>Ваші останні подання показників лічильника</CardDescription>
               </div>
               <Link to="/jobs">
                 <Button variant="outline" size="sm">
-                  View All
+                  Переглянути всі
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
@@ -261,8 +268,8 @@ export const Dashboard: React.FC = () => {
             ) : !status?.recent_jobs?.length ? (
               <div className="text-center py-8">
                 <PlayCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No jobs yet</p>
-                <p className="text-sm text-gray-400 mt-1">Run your first job to see results here</p>
+                <p className="text-gray-500">Завдань ще немає</p>
+                <p className="text-sm text-gray-400 mt-1">Запустіть перше завдання, щоб побачити результати</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
@@ -281,16 +288,16 @@ export const Dashboard: React.FC = () => {
                           className={`w-5 h-5 ${statusInfo.color} ${job.status === 'running' ? 'animate-spin' : ''}`}
                         />
                         <div>
-                          <p className="text-sm font-medium text-gray-900 capitalize">
-                            {job.type.replace('-', ' ')} Job
+                          <p className="text-sm font-medium text-gray-900">
+                            {jobTypeLabels[job.type] || job.type}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {format(new Date(job.created_at), 'MMM d, yyyy HH:mm')}
+                            {format(new Date(job.created_at), 'd MMM yyyy, HH:mm', { locale: uk })}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <Badge variant={statusInfo.variant}>{job.status}</Badge>
+                        <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
                         <ArrowRight className="w-4 h-4 text-gray-400" />
                       </div>
                     </Link>
@@ -307,13 +314,13 @@ export const Dashboard: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Configuration Summary</CardTitle>
-                  <CardDescription>Your current Gasolina settings</CardDescription>
+                  <CardTitle>Налаштування</CardTitle>
+                  <CardDescription>Ваші поточні налаштування Gasolina</CardDescription>
                 </div>
                 <Link to="/config">
                   <Button variant="outline" size="sm">
                     <Settings className="w-4 h-4 mr-2" />
-                    Edit
+                    Редагувати
                   </Button>
                 </Link>
               </div>
@@ -321,19 +328,19 @@ export const Dashboard: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Gasolina Email</p>
-                  <p className="text-sm font-medium text-gray-900">{config.gasolina_email || 'Not set'}</p>
+                  <p className="text-sm text-gray-500">Email Gasolina</p>
+                  <p className="text-sm font-medium text-gray-900">{config.gasolina_email || 'Не вказано'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Account Number</p>
-                  <p className="text-sm font-medium text-gray-900">{config.account_number || 'Not set'}</p>
+                  <p className="text-sm text-gray-500">Номер рахунку</p>
+                  <p className="text-sm font-medium text-gray-900">{config.account_number || 'Не вказано'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Cron Schedule</p>
+                  <p className="text-sm text-gray-500">Розклад (Cron)</p>
                   <p className="text-sm font-medium text-gray-900 font-mono">{config.cron_schedule}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Check URL</p>
+                  <p className="text-sm text-gray-500">URL перевірки</p>
                   <p className="text-sm font-medium text-gray-900 truncate">{config.check_url}</p>
                 </div>
               </div>

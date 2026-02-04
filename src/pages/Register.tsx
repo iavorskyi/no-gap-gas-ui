@@ -10,12 +10,12 @@ import { getErrorMessage } from '../lib/api';
 
 const registerSchema = z
   .object({
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
+    email: z.string().email('Невірна адреса електронної пошти'),
+    password: z.string().min(6, 'Пароль має містити щонайменше 6 символів'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
+    message: 'Паролі не співпадають',
     path: ['confirmPassword'],
   });
 
@@ -61,8 +61,8 @@ export const Register: React.FC = () => {
             <Flame className="w-10 h-10 text-teal-600" />
             <span className="text-2xl font-bold text-gray-900">NoGapGas</span>
           </Link>
-          <h1 className="mt-6 text-3xl font-bold text-gray-900">Create account</h1>
-          <p className="mt-2 text-gray-600">Start tracking your gas consumption</p>
+          <h1 className="mt-6 text-3xl font-bold text-gray-900">Створити обліковий запис</h1>
+          <p className="mt-2 text-gray-600">Почніть відстежувати споживання газу</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
@@ -74,22 +74,22 @@ export const Register: React.FC = () => {
 
           {success && (
             <Alert variant="success" className="mb-6">
-              Account created successfully! Redirecting to login...
+              Обліковий запис успішно створено! Перенаправлення на сторінку входу...
             </Alert>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <Input
-              label="Email"
+              label="Електронна пошта"
               type="email"
               autoComplete="email"
-              placeholder="you@example.com"
+              placeholder="ви@example.com"
               error={errors.email?.message}
               {...register('email')}
             />
 
             <Input
-              label="Password"
+              label="Пароль"
               type="password"
               autoComplete="new-password"
               placeholder="••••••••"
@@ -98,7 +98,7 @@ export const Register: React.FC = () => {
             />
 
             <Input
-              label="Confirm Password"
+              label="Підтвердження пароля"
               type="password"
               autoComplete="new-password"
               placeholder="••••••••"
@@ -107,18 +107,18 @@ export const Register: React.FC = () => {
             />
 
             <Button type="submit" isLoading={isLoading} className="w-full">
-              Create account
+              Створити обліковий запис
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              Вже маєте обліковий запис?{' '}
               <Link
                 to="/login"
                 className="font-medium text-blue-600 hover:text-blue-500"
               >
-                Sign in
+                Увійти
               </Link>
             </p>
           </div>

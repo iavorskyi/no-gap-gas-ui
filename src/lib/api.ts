@@ -224,7 +224,7 @@ export const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     return error.message;
   }
-  return 'An unexpected error occurred';
+  return 'Виникла неочікувана помилка';
 };
 
 export default api;

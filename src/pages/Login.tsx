@@ -9,8 +9,8 @@ import { Button, Input, Alert } from '../components/ui';
 import { getErrorMessage } from '../lib/api';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email('Невірна адреса електронної пошти'),
+  password: z.string().min(6, 'Пароль має містити щонайменше 6 символів'),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -54,8 +54,8 @@ export const Login: React.FC = () => {
             <Flame className="w-10 h-10 text-teal-600" />
             <span className="text-2xl font-bold text-gray-900">NoGapGas</span>
           </Link>
-          <h1 className="mt-6 text-3xl font-bold text-gray-900">Welcome back</h1>
-          <p className="mt-2 text-gray-600">Sign in to manage your gas consumption</p>
+          <h1 className="mt-6 text-3xl font-bold text-gray-900">Вітаємо знову</h1>
+          <p className="mt-2 text-gray-600">Увійдіть, щоб керувати споживанням газу</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
@@ -67,16 +67,16 @@ export const Login: React.FC = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <Input
-              label="Email"
+              label="Електронна пошта"
               type="email"
               autoComplete="email"
-              placeholder="you@example.com"
+              placeholder="ви@example.com"
               error={errors.email?.message}
               {...register('email')}
             />
 
             <Input
-              label="Password"
+              label="Пароль"
               type="password"
               autoComplete="current-password"
               placeholder="••••••••"
@@ -85,18 +85,18 @@ export const Login: React.FC = () => {
             />
 
             <Button type="submit" isLoading={isLoading} className="w-full">
-              Sign in
+              Увійти
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Немає облікового запису?{' '}
               <Link
                 to="/register"
                 className="font-medium text-blue-600 hover:text-blue-500"
               >
-                Sign up
+                Зареєструватися
               </Link>
             </p>
           </div>

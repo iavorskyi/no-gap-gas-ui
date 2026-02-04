@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import {
   CheckCircle,
   XCircle,
@@ -34,9 +35,9 @@ const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; 
 };
 
 const jobTypeLabels: Record<JobType, string> = {
-  full: 'Full Automation',
-  'test-login': 'Test Login',
-  'test-check': 'Test Check',
+  full: 'Повна автоматизація',
+  'test-login': 'Тест входу',
+  'test-check': 'Тест перевірки',
 };
 
 export const JobDetails: React.FC = () => {
@@ -68,11 +69,11 @@ export const JobDetails: React.FC = () => {
       <Layout>
         <div className="p-6 lg:p-8">
           <Alert variant="error">
-            Job not found or failed to load.
+            Завдання не знайдено або не вдалося завантажити.
           </Alert>
           <Link to="/jobs" className="inline-flex items-center mt-4 text-blue-600 hover:text-blue-700">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Jobs
+            Назад до завдань
           </Link>
         </div>
       </Layout>
@@ -114,33 +115,33 @@ export const JobDetails: React.FC = () => {
         {/* Job Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Job Information</CardTitle>
+            <CardTitle>Інформація про завдання</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
-                <p className="text-sm text-gray-500">Type</p>
+                <p className="text-sm text-gray-500">Тип</p>
                 <p className="text-sm font-medium text-gray-900">{jobTypeLabels[job.type]}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Created</p>
+                <p className="text-sm text-gray-500">Створено</p>
                 <p className="text-sm font-medium text-gray-900">
-                  {format(new Date(job.created_at), 'MMM d, yyyy HH:mm:ss')}
+                  {format(new Date(job.created_at), 'd MMM yyyy, HH:mm:ss', { locale: uk })}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Started</p>
+                <p className="text-sm text-gray-500">Розпочато</p>
                 <p className="text-sm font-medium text-gray-900">
                   {job.started_at
-                    ? format(new Date(job.started_at), 'MMM d, yyyy HH:mm:ss')
+                    ? format(new Date(job.started_at), 'd MMM yyyy, HH:mm:ss', { locale: uk })
                     : '-'}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Completed</p>
+                <p className="text-sm text-gray-500">Завершено</p>
                 <p className="text-sm font-medium text-gray-900">
                   {job.completed_at
-                    ? format(new Date(job.completed_at), 'MMM d, yyyy HH:mm:ss')
+                    ? format(new Date(job.completed_at), 'd MMM yyyy, HH:mm:ss', { locale: uk })
                     : '-'}
                 </p>
               </div>
@@ -148,7 +149,7 @@ export const JobDetails: React.FC = () => {
 
             {job.error && (
               <Alert variant="error" className="mt-6">
-                <p className="font-medium">Error:</p>
+                <p className="font-medium">Помилка:</p>
                 <p className="mt-1">{job.error}</p>
               </Alert>
             )}
@@ -160,15 +161,15 @@ export const JobDetails: React.FC = () => {
           <CardHeader>
             <div className="flex items-center space-x-2">
               <Terminal className="w-5 h-5 text-gray-500" />
-              <CardTitle>Logs</CardTitle>
+              <CardTitle>Журнал</CardTitle>
             </div>
             <CardDescription>
-              {job.logs?.length || 0} log entries
+              Записів: {job.logs?.length || 0}
             </CardDescription>
           </CardHeader>
           <CardContent>
             {!job.logs?.length ? (
-              <p className="text-gray-500 text-center py-4">No logs available</p>
+              <p className="text-gray-500 text-center py-4">Журнал порожній</p>
             ) : (
               <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto max-h-96 overflow-y-auto">
                 <pre className="text-sm text-gray-100 font-mono whitespace-pre-wrap">
@@ -188,15 +189,15 @@ export const JobDetails: React.FC = () => {
           <CardHeader>
             <div className="flex items-center space-x-2">
               <Image className="w-5 h-5 text-gray-500" />
-              <CardTitle>Screenshots</CardTitle>
+              <CardTitle>Знімки екрану</CardTitle>
             </div>
             <CardDescription>
-              {job.screenshots?.length || 0} screenshots captured
+              Знімків: {job.screenshots?.length || 0}
             </CardDescription>
           </CardHeader>
           <CardContent>
             {!job.screenshots?.length ? (
-              <p className="text-gray-500 text-center py-4">No screenshots available</p>
+              <p className="text-gray-500 text-center py-4">Знімки екрану відсутні</p>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {job.screenshots.map((screenshot) => (
@@ -212,7 +213,7 @@ export const JobDetails: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
                       <span className="text-white opacity-0 group-hover:opacity-100 text-sm font-medium">
-                        View
+                        Переглянути
                       </span>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 truncate">

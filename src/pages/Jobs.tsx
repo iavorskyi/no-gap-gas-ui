@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import {
   CheckCircle,
   XCircle,
@@ -34,9 +35,9 @@ const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; 
 };
 
 const jobTypeLabels: Record<JobType, string> = {
-  full: 'Full Automation',
-  'test-login': 'Test Login',
-  'test-check': 'Test Check',
+  full: 'Повна автоматизація',
+  'test-login': 'Тест входу',
+  'test-check': 'Тест перевірки',
 };
 
 export const Jobs: React.FC = () => {
@@ -77,13 +78,13 @@ export const Jobs: React.FC = () => {
       <div className="p-6 lg:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Jobs</h1>
-            <p className="text-gray-600 mt-1">Track your gas meter reading submissions</p>
+            <h1 className="text-2xl font-bold text-gray-900">Завдання</h1>
+            <p className="text-gray-600 mt-1">Відстежуйте подання показників лічильника газу</p>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="outline" onClick={() => refetch()}>
               <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
+              Оновити
             </Button>
           </div>
         </div>
@@ -91,8 +92,8 @@ export const Jobs: React.FC = () => {
         {/* Create Job Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Create New Job</CardTitle>
-            <CardDescription>Run a new automation task</CardDescription>
+            <CardTitle>Створити нове завдання</CardTitle>
+            <CardDescription>Запустити нове завдання автоматизації</CardDescription>
           </CardHeader>
           <CardContent>
             {error && (
@@ -103,12 +104,12 @@ export const Jobs: React.FC = () => {
 
             {!status?.configured && (
               <Alert variant="warning" className="mb-4">
-                <p>Configure your Gasolina credentials before running jobs.</p>
+                <p>Налаштуйте облікові дані Gasolina перед запуском завдань.</p>
                 <Link
                   to="/config"
                   className="inline-flex items-center mt-2 text-sm font-medium text-yellow-800 hover:text-yellow-900"
                 >
-                  Go to Configuration
+                  Перейти до налаштувань
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </Alert>
@@ -117,7 +118,7 @@ export const Jobs: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Job Type
+                  Тип завдання
                 </label>
                 <select
                   value={selectedJobType}
@@ -125,9 +126,9 @@ export const Jobs: React.FC = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   disabled={!status?.configured}
                 >
-                  <option value="full">Full Automation - Complete login, check, and update</option>
-                  <option value="test-login">Test Login - Test credentials only</option>
-                  <option value="test-check">Test Check - Test login and page checking</option>
+                  <option value="full">Повна автоматизація - Вхід, перевірка та оновлення</option>
+                  <option value="test-login">Тест входу - Тільки перевірка облікових даних</option>
+                  <option value="test-check">Тест перевірки - Вхід та перевірка сторінки</option>
                 </select>
               </div>
               <div className="flex items-end">
@@ -137,7 +138,7 @@ export const Jobs: React.FC = () => {
                   disabled={!status?.configured}
                 >
                   <PlayCircle className="w-4 h-4 mr-2" />
-                  Run Job
+                  Запустити
                 </Button>
               </div>
             </div>
@@ -149,9 +150,9 @@ export const Jobs: React.FC = () => {
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle>Job History</CardTitle>
+                <CardTitle>Історія завдань</CardTitle>
                 <CardDescription>
-                  {jobs?.total || 0} total jobs
+                  Всього завдань: {jobs?.total || 0}
                 </CardDescription>
               </div>
               <div className="flex items-center gap-2">
@@ -161,11 +162,11 @@ export const Jobs: React.FC = () => {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">All Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="running">Running</option>
-                  <option value="completed">Completed</option>
-                  <option value="failed">Failed</option>
+                  <option value="">Всі статуси</option>
+                  <option value="pending">Очікує</option>
+                  <option value="running">Виконується</option>
+                  <option value="completed">Завершено</option>
+                  <option value="failed">Помилка</option>
                 </select>
               </div>
             </div>
@@ -178,9 +179,9 @@ export const Jobs: React.FC = () => {
             ) : !jobs?.jobs?.length ? (
               <div className="text-center py-8">
                 <PlayCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No jobs found</p>
+                <p className="text-gray-500">Завдань не знайдено</p>
                 <p className="text-sm text-gray-400 mt-1">
-                  {statusFilter ? 'Try clearing the filter' : 'Create your first job above'}
+                  {statusFilter ? 'Спробуйте очистити фільтр' : 'Створіть своє перше завдання вище'}
                 </p>
               </div>
             ) : (
@@ -188,11 +189,11 @@ export const Jobs: React.FC = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Status</th>
-                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Type</th>
-                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Created</th>
-                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Completed</th>
-                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Статус</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Тип</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Створено</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Завершено</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Дії</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -217,13 +218,13 @@ export const Jobs: React.FC = () => {
                           </td>
                           <td className="py-3 px-4">
                             <span className="text-sm text-gray-500">
-                              {format(new Date(job.created_at), 'MMM d, HH:mm')}
+                              {format(new Date(job.created_at), 'd MMM, HH:mm', { locale: uk })}
                             </span>
                           </td>
                           <td className="py-3 px-4">
                             <span className="text-sm text-gray-500">
                               {job.completed_at
-                                ? format(new Date(job.completed_at), 'MMM d, HH:mm')
+                                ? format(new Date(job.completed_at), 'd MMM, HH:mm', { locale: uk })
                                 : '-'}
                             </span>
                           </td>
@@ -232,7 +233,7 @@ export const Jobs: React.FC = () => {
                               to={`/jobs/${job.id}`}
                               className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                             >
-                              View Details
+                              Деталі
                             </Link>
                           </td>
                         </tr>

@@ -17,10 +17,10 @@ interface LayoutProps {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Jobs', href: '/jobs', icon: PlayCircle },
-  { name: 'Configuration', href: '/config', icon: Settings },
-  { name: 'Profile', href: '/profile', icon: User },
+  { name: 'Головна', href: '/', icon: LayoutDashboard },
+  { name: 'Завдання', href: '/jobs', icon: PlayCircle },
+  { name: 'Налаштування', href: '/config', icon: Settings },
+  { name: 'Профіль', href: '/profile', icon: User },
 ];
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -108,7 +108,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               className="flex items-center w-full px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <LogOut className="w-5 h-5 mr-3 text-gray-400" />
-              Sign out
+              Вийти
             </button>
           </div>
         </div>
