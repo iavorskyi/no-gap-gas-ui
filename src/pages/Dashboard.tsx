@@ -24,7 +24,7 @@ import type { JobStatus } from '../types/api';
 
 const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info'; label: string }> = {
   pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning', label: 'Очікує' },
-  running: { icon: Loader2, color: 'text-blue-500', variant: 'info', label: 'Виконується' },
+  running: { icon: Loader2, color: 'text-teal-500', variant: 'info', label: 'Виконується' },
   completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success', label: 'Завершено' },
   failed: { icon: XCircle, color: 'text-red-500', variant: 'error', label: 'Помилка' },
 };
@@ -93,8 +93,8 @@ export const Dashboard: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-full bg-blue-100">
-                    <User className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 rounded-full bg-teal-100">
+                    <User className="w-5 h-5 text-teal-600" />
                   </div>
                   <div>
                     <CardTitle>Обліковий запис Gasolina</CardTitle>
@@ -117,7 +117,7 @@ export const Dashboard: React.FC = () => {
             <CardContent>
               {gasolinaInfoLoading || gasolinaInfoFetching ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                  <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
                   <span className="ml-2 text-gray-500">Завантаження даних з Gasolina...</span>
                 </div>
               ) : gasolinaInfo ? (
@@ -136,18 +136,18 @@ export const Dashboard: React.FC = () => {
                   {/* Counter Info */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
-                      <Gauge className="w-8 h-8 text-blue-500" />
+                      <Gauge className="w-8 h-8 text-teal-500" />
                       <div>
                         <p className="text-xs text-gray-500">№ лічильника</p>
                         <p className="text-lg font-bold text-gray-900">{gasolinaInfo.counter_number}</p>
                         <p className="text-xs text-gray-400">{gasolinaInfo.counter_type}</p>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg">
+                    <div className="flex items-center space-x-3 p-4 bg-teal-50 rounded-lg">
                       <div className="text-3xl">📊</div>
                       <div>
                         <p className="text-xs text-gray-500">Попередній показник</p>
-                        <p className="text-2xl font-bold text-blue-600">{gasolinaInfo.previous_reading}</p>
+                        <p className="text-2xl font-bold text-teal-600">{gasolinaInfo.previous_reading}</p>
                         <p className="text-xs text-gray-400">м³</p>
                       </div>
                     </div>
@@ -197,51 +197,57 @@ export const Dashboard: React.FC = () => {
 
         {/* Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardContent className="flex items-center space-x-4 py-6">
-              <div className={`p-3 rounded-full ${status?.configured ? 'bg-green-100' : 'bg-yellow-100'}`}>
-                {status?.configured ? (
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                ) : (
-                  <AlertTriangle className="w-6 h-6 text-yellow-600" />
-                )}
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Статус конфігурації</p>
-                <p className="text-lg font-semibold text-gray-900">
-                  {isLoading ? 'Завантаження...' : status?.configured ? 'Налаштовано' : 'Не налаштовано'}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Link to="/config" className="group">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardContent className="flex items-center space-x-4 py-6">
+                <div className={`p-3 rounded-full ${status?.configured ? 'bg-green-100' : 'bg-yellow-100'}`}>
+                  {status?.configured ? (
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  ) : (
+                    <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Статус конфігурації</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {isLoading ? 'Завантаження...' : status?.configured ? 'Налаштовано' : 'Не налаштовано'}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardContent className="flex items-center space-x-4 py-6">
-              <div className="p-3 rounded-full bg-blue-100">
-                <PlayCircle className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Подання показників</p>
-                <p className="text-lg font-semibold text-gray-900">
-                  {isLoading ? 'Завантаження...' : status?.recent_jobs?.length || 0}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Link to="/jobs" className="group">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardContent className="flex items-center space-x-4 py-6">
+                <div className="p-3 rounded-full bg-teal-100">
+                  <PlayCircle className="w-6 h-6 text-teal-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Подання показників</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {isLoading ? 'Завантаження...' : status?.recent_jobs?.length || 0}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardContent className="flex items-center space-x-4 py-6">
-              <div className="p-3 rounded-full bg-purple-100">
-                <Settings className="w-6 h-6 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Тестовий режим</p>
-                <p className="text-lg font-semibold text-gray-900">
-                  {isLoading ? 'Завантаження...' : config?.dry_run ? 'Увімкнено' : 'Вимкнено'}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Link to="/config" className="group">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardContent className="flex items-center space-x-4 py-6">
+                <div className="p-3 rounded-full bg-purple-100">
+                  <Settings className="w-6 h-6 text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Тестовий режим</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {isLoading ? 'Завантаження...' : config?.dry_run ? 'Увімкнено' : 'Вимкнено'}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Recent Jobs */}
@@ -263,7 +269,7 @@ export const Dashboard: React.FC = () => {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
               </div>
             ) : !status?.recent_jobs?.length ? (
               <div className="text-center py-8">

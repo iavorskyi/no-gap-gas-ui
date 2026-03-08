@@ -27,11 +27,11 @@ import {
 import { jobsApi, statusApi, getErrorMessage } from '../lib/api';
 import type { JobStatus, JobType } from '../types/api';
 
-const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info' }> = {
-  pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning' },
-  running: { icon: Loader2, color: 'text-blue-500', variant: 'info' },
-  completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success' },
-  failed: { icon: XCircle, color: 'text-red-500', variant: 'error' },
+const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info'; label: string }> = {
+  pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning', label: 'Очікує' },
+  running: { icon: Loader2, color: 'text-blue-500', variant: 'info', label: 'Виконується' },
+  completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success', label: 'Завершено' },
+  failed: { icon: XCircle, color: 'text-red-500', variant: 'error', label: 'Помилка' },
 };
 
 const jobTypeLabels: Record<JobType, string> = {
@@ -123,7 +123,7 @@ export const Jobs: React.FC = () => {
                 <select
                   value={selectedJobType}
                   onChange={(e) => setSelectedJobType(e.target.value as JobType)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                   disabled={!status?.configured}
                 >
                   <option value="full">Повна автоматизація - Вхід, перевірка та оновлення</option>
@@ -160,7 +160,7 @@ export const Jobs: React.FC = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 >
                   <option value="">Всі статуси</option>
                   <option value="pending">Очікує</option>
@@ -174,7 +174,7 @@ export const Jobs: React.FC = () => {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
               </div>
             ) : !jobs?.jobs?.length ? (
               <div className="text-center py-8">
@@ -208,7 +208,7 @@ export const Jobs: React.FC = () => {
                               <StatusIcon
                                 className={`w-4 h-4 ${statusInfo.color} ${job.status === 'running' ? 'animate-spin' : ''}`}
                               />
-                              <Badge variant={statusInfo.variant}>{job.status}</Badge>
+                              <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
                             </div>
                           </td>
                           <td className="py-3 px-4">
@@ -231,7 +231,7 @@ export const Jobs: React.FC = () => {
                           <td className="py-3 px-4">
                             <Link
                               to={`/jobs/${job.id}`}
-                              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                              className="text-sm text-teal-600 hover:text-teal-700 font-medium"
                             >
                               Деталі
                             </Link>

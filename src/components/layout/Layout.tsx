@@ -77,10 +77,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   to={item.href}
                   onClick={() => setSidebarOpen(false)}
                   className={`
-                    flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors
+                    flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-all
                     ${isActive
-                      ? 'bg-teal-50 text-teal-700'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-teal-50 text-teal-700 border-l-4 border-teal-600 !pl-3'
+                      : 'text-gray-700 hover:bg-gray-100 border-l-4 border-transparent !pl-3'
                     }
                   `}
                 >

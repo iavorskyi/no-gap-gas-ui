@@ -116,7 +116,7 @@ export const Register: React.FC = () => {
               Вже маєте обліковий запис?{' '}
               <Link
                 to="/login"
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-teal-600 hover:text-teal-500"
               >
                 Увійти
               </Link>

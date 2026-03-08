@@ -94,7 +94,7 @@ export const Login: React.FC = () => {
               Немає облікового запису?{' '}
               <Link
                 to="/register"
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-teal-600 hover:text-teal-500"
               >
                 Зареєструватися
               </Link>

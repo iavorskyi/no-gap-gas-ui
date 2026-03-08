@@ -27,11 +27,11 @@ import {
 import { jobsApi, screenshotsApi } from '../lib/api';
 import type { JobStatus, JobType } from '../types/api';
 
-const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info' }> = {
-  pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning' },
-  running: { icon: Loader2, color: 'text-blue-500', variant: 'info' },
-  completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success' },
-  failed: { icon: XCircle, color: 'text-red-500', variant: 'error' },
+const statusConfig: Record<JobStatus, { icon: React.ElementType; color: string; variant: 'default' | 'success' | 'warning' | 'error' | 'info'; label: string }> = {
+  pending: { icon: Clock, color: 'text-yellow-500', variant: 'warning', label: 'Очікує' },
+  running: { icon: Loader2, color: 'text-blue-500', variant: 'info', label: 'Виконується' },
+  completed: { icon: CheckCircle, color: 'text-green-500', variant: 'success', label: 'Завершено' },
+  failed: { icon: XCircle, color: 'text-red-500', variant: 'error', label: 'Помилка' },
 };
 
 const jobTypeLabels: Record<JobType, string> = {
@@ -58,7 +58,7 @@ export const JobDetails: React.FC = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
         </div>
       </Layout>
     );
@@ -71,7 +71,7 @@ export const JobDetails: React.FC = () => {
           <Alert variant="error">
             Завдання не знайдено або не вдалося завантажити.
           </Alert>
-          <Link to="/jobs" className="inline-flex items-center mt-4 text-blue-600 hover:text-blue-700">
+          <Link to="/jobs" className="inline-flex items-center mt-4 text-teal-600 hover:text-teal-700">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Назад до завдань
           </Link>
@@ -107,7 +107,7 @@ export const JobDetails: React.FC = () => {
               className={`w-5 h-5 ${statusInfo.color} ${job.status === 'running' ? 'animate-spin' : ''}`}
             />
             <Badge variant={statusInfo.variant} className="text-sm">
-              {job.status}
+              {statusInfo.label}
             </Badge>
           </div>
         </div>

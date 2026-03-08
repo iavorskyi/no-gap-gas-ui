@@ -84,8 +84,8 @@ export const Profile: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-6">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="w-10 h-10 text-blue-600" />
+              <div className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center">
+                <User className="w-10 h-10 text-teal-600" />
               </div>
               <div className="space-y-3">
                 <div className="flex items-center space-x-2 text-gray-600">
@@ -170,19 +170,19 @@ export const Profile: React.FC = () => {
           <CardContent>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start space-x-2">
-                <span className="text-blue-500 font-bold">•</span>
+                <span className="text-teal-500 font-bold">•</span>
                 <span>Використовуйте надійний унікальний пароль з щонайменше 6 символів</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="text-blue-500 font-bold">•</span>
+                <span className="text-teal-500 font-bold">•</span>
                 <span>Включіть комбінацію літер, цифр та спеціальних символів</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="text-blue-500 font-bold">•</span>
+                <span className="text-teal-500 font-bold">•</span>
                 <span>Не використовуйте паролі з інших облікових записів</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="text-blue-500 font-bold">•</span>
+                <span className="text-teal-500 font-bold">•</span>
                 <span>Ваші облікові дані Gasolina зашифровані та надійно зберігаються</span>
               </li>
             </ul>

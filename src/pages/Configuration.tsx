@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Save, RefreshCw, Info } from 'lucide-react';
+import { Save, Info, Loader2 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import {
   Card,
@@ -128,7 +128,7 @@ export const Configuration: React.FC = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
         </div>
       </Layout>
     );
@@ -219,7 +219,7 @@ export const Configuration: React.FC = () => {
                 <input
                   type="checkbox"
                   id="dry_run"
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
                   {...register('dry_run')}
                 />
                 <label htmlFor="dry_run" className="text-sm font-medium text-gray-700">
@@ -239,7 +239,7 @@ export const Configuration: React.FC = () => {
           {/* Monthly Increments */}
           <Card>
             <CardHeader>
-              <CardTitle>Місячні приріости</CardTitle>
+              <CardTitle>Місячні прирости</CardTitle>
               <CardDescription>
                 Встановіть значення приросту для кожного місяця (скільки додавати до поточного показника)
               </CardDescription>
@@ -256,7 +256,7 @@ export const Configuration: React.FC = () => {
                       min="0"
                       value={monthlyIncrements[(index + 1).toString()] ?? ''}
                       onChange={(e) => handleIncrementChange(index + 1, e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="0"
                     />
                   </div>
